@@ -23,8 +23,9 @@ function AddNew() {
                 
                     <button type='button' className=' mt-5 px-2 '>
                         <lord-icon
-                            src="https://cdn.lordicon.com/tsrgicte.json"
+                            src="https://cdn.lordicon.com/sbnjyzil.json"
                             trigger="hover"
+                            state="hover-swirl"
                             stroke='bold'
                             colors="primary:#0092b8,secondary:#000000"
                             className='w-10 h-10'>
