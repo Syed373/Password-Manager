@@ -21,8 +21,8 @@ A secure and user-friendly password manager application that helps users store, 
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/your-username/password-manager.git
-   cd password-manager
+   git clone https://github.com/Syed373/Password-Manager.git
+   cd Password-Manager
    ```
 
 2. **Install dependencies:**
