@@ -18,9 +18,18 @@ function AddNew() {
                     <input type="url" placeholder='Enter the Website URL...' className='w-[680px] h-4 border-3 border-cyan-600 rounded-full px-2 py-3' name='' id='' />
                     <div className='flex justify-center items-center gap-20 mt-5'>
                         <input type="text" placeholder='Enter the Username...' className='w-[300px] h-4 border-3 border-cyan-600 rounded-full px-2 py-3' />
-                        <input type="text" placeholder='Enter the Passsword...' className='w-[300px] h-4 border-3 border-cyan-600 rounded-full px-2 py-3' />
+                        <div className='w-[300px] h-fit border-3 border-cyan-600 rounded-full flex items-center'>
+                            <input type="text" placeholder='Enter the Passsword...' className='w-[300px] h-4 px-2 py-3  ' />
+                            <lord-icon
+                                src="https://cdn.lordicon.com/dicvhxpz.json"
+                                trigger="hover"
+                                state="hover-look-around"
+                                colors="primary:#121331,secondary:#66d7ee"
+                                className="w-7 h-6 mr-1">
+                            </lord-icon>
+                        </div>
                     </div>
-                
+
                     <button type='button' className=' mt-5 px-2 '>
                         <lord-icon
                             src="https://cdn.lordicon.com/sbnjyzil.json"
