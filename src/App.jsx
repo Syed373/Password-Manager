@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import Navbar from './components/Header/Navbar'
-import AddNew from './components/Body/AddNew'
-import PreviousSaved from './components/Body/PreviousSaved'
+import Manage from './components/Body/Manage'
 import './App.css'
 
 function App() {
@@ -11,8 +10,7 @@ function App() {
     <>
       <div>
         <Navbar></Navbar>
-        <AddNew></AddNew>
-        <PreviousSaved></PreviousSaved>
+        <Manage></Manage>
       </div>
     </>
   )
