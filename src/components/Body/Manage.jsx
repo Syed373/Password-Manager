@@ -1,5 +1,6 @@
 import React from 'react'
 import { useState, useEffect, useRef } from 'react'
+import { v4 as uuidv4 } from 'uuid';
 
 function Manage() {
 
@@ -20,7 +21,7 @@ function Manage() {
         }
     }
 
-    const showPassword2 = () => {
+    const showPassword2 = (id) => {
         if (ref2.current.state.includes("hover-look-around")) {
             ref2.current.state = "hover-cross"
             passwordref2.current.type = "text"
@@ -44,15 +45,21 @@ function Manage() {
     }
 
     const Add = () => {
-        setPasswordArray([...PasswordArray, form])
-        localStorage.setItem("passwords", JSON.stringify([...PasswordArray, form]))
-        console.log([...PasswordArray, form])
+        setPasswordArray([...PasswordArray, { ...form, id: uuidv4() }])
+        localStorage.setItem("passwords", JSON.stringify([...PasswordArray, { ...form, id: uuidv4() }]))
+        console.log([...PasswordArray, { ...form, id: uuidv4() }])
     }
 
-    const deletePassword = () => {
-        // keys = e.target.key;
-        localStorage.removeItem("passwords")
+    const deletePassword = (id) => {
+        setPasswordArray(PasswordArray.filter(item => item.id !== id))
+        localStorage.setItem("passwords", JSON.stringify(PasswordArray.filter(item => item.id !== id)))
+
     }
+
+    const editPassword = (id) => {
+
+    }
+
 
     return (
         <>
@@ -155,24 +162,24 @@ function Manage() {
                                     </div>
                                 </td>
                                 <td className='w-72 h-8 border-3 border-cyan-600 rounded-full px-2 flex justify-between'>
-                                    <input ref={passwordref2} type="password" value={item.password} className='focus:outline-none'/>
-                                    <div className='flex justify-center items-center gap-2'>
-                                        <div className='pt-1' onClick={showPassword2}>
-                                            <lord-icon
-                                                ref={ref2}
-                                                src="https://cdn.lordicon.com/dicvhxpz.json"
-                                                trigger="hover"
-                                                state="hover-look-around"
-                                                colors="primary:#121331,secondary:#121331"
-                                                className="w-7 h-5">
-                                            </lord-icon>
-                                        </div>
+                                    <input ref={passwordref2} type="password" value={item.password} readOnly className='focus:outline-none' />
+                                    <div className='flex justify-center items-center gap-1'>
+                                        <lord-icon
+                                            ref={ref2}
+                                            onClick={() => {showPassword2(item.id)}}
+                                            src="https://cdn.lordicon.com/dicvhxpz.json"
+                                            trigger="hover"
+                                            state="hover-look-around"
+                                            colors="primary:#121331,secondary:#121331"
+                                            className="w-7 h-5">
+                                        </lord-icon>
                                         <button >
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="14" fill="currentColor" className="bi bi-copy" viewBox="0 0 16 16">
                                                 <path fillRule="evenodd" d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z" />
                                             </svg>
                                         </button>
                                         <lord-icon
+                                            onClick={() => { editPassword(item.id) }}
                                             src="https://cdn.lordicon.com/exymduqj.json"
                                             trigger="hover"
                                             state="hover-line"
@@ -183,10 +190,10 @@ function Manage() {
                                 </td>
                                 <td className='flex justify-center items-center'>
                                     <lord-icon
+                                        onClick={() => { deletePassword(item.id) }}
                                         src="https://cdn.lordicon.com/hwjcdycb.json"
                                         trigger="morph"
                                         stroke="bold"
-                                        onClick={deletePassword}
                                         state="morph-trash-in"
                                         colors="primary:#000000,secondary:#66d7ee"
                                         className="w-7 h-7">
