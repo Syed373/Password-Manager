@@ -1,10 +1,34 @@
 import React from 'react'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 function Manage() {
 
     const [form, setform] = useState({ url: "", username: "", password: "" })
     const [PasswordArray, setPasswordArray] = useState([])
+
+    const ref1 = useRef();
+    const ref2 = useRef();
+    const passwordref = useRef();
+    const passwordref2 = useRef();
+    const showPassword = () => {
+        if (ref1.current.state.includes("hover-look-around")) {
+            ref1.current.state = "hover-cross"
+            passwordref.current.type = "text"
+        } else {
+            ref1.current.state = "hover-look-around";
+            passwordref.current.type = "password"
+        }
+    }
+
+    const showPassword2 = () => {
+        if (ref2.current.state.includes("hover-look-around")) {
+            ref2.current.state = "hover-cross"
+            passwordref2.current.type = "text"
+        } else {
+            ref2.current.state = "hover-look-around";
+            passwordref2.current.type = "password"
+        }
+    }
 
     useEffect(() => {
         const passwords = localStorage.getItem("passwords")
@@ -25,6 +49,11 @@ function Manage() {
         console.log([...PasswordArray, form])
     }
 
+    const deletePassword = () => {
+        // keys = e.target.key;
+        localStorage.removeItem("passwords")
+    }
+
     return (
         <>
             <div className='h-fit w-screen flex justify-center item-center'>
@@ -43,14 +72,17 @@ function Manage() {
                     <div className='flex justify-center items-center gap-20 mt-5'>
                         <input value={form.username} onChange={handleChange} name="username" type="text" placeholder='Enter the Username...' className='w-[300px] h-4 border-3 border-cyan-600 rounded-full px-2 py-3 focus:outline-none' />
                         <div className='w-[300px] h-fit border-3 border-cyan-600 rounded-full flex items-center'>
-                            <input value={form.password} onChange={handleChange} name="password" type="text" placeholder='Enter the Passsword...' className='w-[300px] h-4 rounded-full px-2 py-3 focus:outline-none ' />
-                            <lord-icon
-                                src="https://cdn.lordicon.com/dicvhxpz.json"
-                                trigger="hover"
-                                state="hover-look-around"
-                                colors="primary:#121331,secondary:#66d7ee"
-                                className="w-7 h-6 mr-1">
-                            </lord-icon>
+                            <input ref={passwordref} value={form.password} onChange={handleChange} name="password" type="password" placeholder='Enter the Passsword...' className='w-[300px] h-4 rounded-full px-2 py-3 focus:outline-none ' />
+                            <div onClick={showPassword} className='flex justify-center'>
+                                <lord-icon
+                                    ref={ref1}
+                                    src="https://cdn.lordicon.com/dicvhxpz.json"
+                                    trigger="hover"
+                                    state="hover-look-around"
+                                    colors="primary:#121331,secondary:#121331"
+                                    className="w-7 h-6 mr-1">
+                                </lord-icon>
+                            </div>
                         </div>
                     </div>
 
@@ -82,14 +114,14 @@ function Manage() {
                         <tr className='flex gap-3 items-center'>
                             <th className=' bg-cyan-400 w-92 h-8 border-3 border-cyan-400 rounded-full px-2 flex justify-center'>Url</th>
                             <th className='bg-cyan-400 w-64 h-8 border-3 border-cyan-400 rounded-full px-2 flex  justify-center'>Username</th>
-                            <th className='bg-cyan-400 w-64 h-8 border-3 border-cyan-400 rounded-full px-2 flex justify-center'>Password</th>
+                            <th className='bg-cyan-400 w-72 h-8 border-3 border-cyan-400 rounded-full px-2 flex justify-center'>Password</th>
                         </tr>
                     </thead>
                     <tbody>
                         {PasswordArray.map((item, index) => {
                             return <tr key={index} className='my-3 gap-3 flex'>
-                                <td className='w-92 h-8 border-3 border-cyan-600 rounded-full px-2 flex justify-between'>
-                                    <div><a href={item.url} target='_blank'>{item.url}</a></div>
+                                <td className='w-92 h-8 border-3 border-cyan-600 rounded-full gap-3 px-2 flex justify-between'>
+                                    <div className='overflow-hidden'><a href={item.url} target='_blank'>{item.url}</a></div>
                                     <div className='flex justify-center items-center gap-2'>
                                         <button >
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="14" fill="currentColor" className="bi bi-copy" viewBox="0 0 16 16">
@@ -105,7 +137,7 @@ function Manage() {
                                         </lord-icon>
                                     </div>
                                 </td>
-                                <td className='w-64 h-8 border-3 border-cyan-600 rounded-full px-2 flex justify-between'>
+                                <td className='w-64 h-8 border-3 border-cyan-600 rounded-full px-2 gap-3 flex justify-between'>
                                     <div>{item.username}</div>
                                     <div className='flex justify-center items-center gap-2'>
                                         <button >
@@ -122,16 +154,19 @@ function Manage() {
                                         </lord-icon>
                                     </div>
                                 </td>
-                                <td className='w-64 h-8 border-3 border-cyan-600 rounded-full px-2 flex justify-between'>
-                                    <div>{item.password}</div>
+                                <td className='w-72 h-8 border-3 border-cyan-600 rounded-full px-2 flex justify-between'>
+                                    <input ref={passwordref2} type="password" value={item.password} className='focus:outline-none'/>
                                     <div className='flex justify-center items-center gap-2'>
-                                        <lord-icon
-                                            src="https://cdn.lordicon.com/dicvhxpz.json"
-                                            trigger="hover"
-                                            state="hover-look-around"
-                                            colors="primary:#121331,secondary:#66d7ee"
-                                            className="w-7 h-5">
-                                        </lord-icon>
+                                        <div className='pt-1' onClick={showPassword2}>
+                                            <lord-icon
+                                                ref={ref2}
+                                                src="https://cdn.lordicon.com/dicvhxpz.json"
+                                                trigger="hover"
+                                                state="hover-look-around"
+                                                colors="primary:#121331,secondary:#121331"
+                                                className="w-7 h-5">
+                                            </lord-icon>
+                                        </div>
                                         <button >
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="14" fill="currentColor" className="bi bi-copy" viewBox="0 0 16 16">
                                                 <path fillRule="evenodd" d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z" />
@@ -141,13 +176,21 @@ function Manage() {
                                             src="https://cdn.lordicon.com/exymduqj.json"
                                             trigger="hover"
                                             state="hover-line"
-                                            colors="primary:#121331,secondary:#66d7ee"
+                                            colors="primary:#121331,secondary:#121331"
                                             className="w-7 h-5">
                                         </lord-icon>
                                     </div>
                                 </td>
-                                <td>
-                                    delete
+                                <td className='flex justify-center items-center'>
+                                    <lord-icon
+                                        src="https://cdn.lordicon.com/hwjcdycb.json"
+                                        trigger="morph"
+                                        stroke="bold"
+                                        onClick={deletePassword}
+                                        state="morph-trash-in"
+                                        colors="primary:#000000,secondary:#66d7ee"
+                                        className="w-7 h-7">
+                                    </lord-icon>
                                 </td>
                             </tr>
                         })}
