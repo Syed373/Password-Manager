@@ -29,34 +29,39 @@ function Manage() {
     }, [])
 
     const handleChange = (e) => {
-        setform({ ...form, [e.target.name]: [e.target.value] })
+        setform({ ...form, [e.target.name]: e.target.value })
     }
 
-    const Add = () => {
-        setPasswordArray([...PasswordArray, { ...form, id: uuidv4() }])
-        localStorage.setItem("passwords", JSON.stringify([...PasswordArray, { ...form, id: uuidv4() }]))
-        console.log([...PasswordArray, { ...form, id: uuidv4() }])
+    const AddPassword = () => {
+        if (!form.url || !form.username || !form.password) {
+            toast.error("Please fill all fields!");
+            return;
+        }
+
+        const newPassword = { ...form, id: uuidv4() };
+        const updatedPasswords = [...PasswordArray, newPassword];
+
+        setPasswordArray(updatedPasswords)
+        localStorage.setItem("passwords", JSON.stringify(updatedPasswords))
+        console.log(updatedPasswords)
         setform({ url: "", username: "", password: "" })
     }
 
-    const deletePassword = (id) => {
-        let confirms = confirm("Are you sure you want to delete the password")
-        if (PasswordArray.length === 0) {
-            localStorage.clear()
-        } else {
-            if (confirms) {
-                setPasswordArray(PasswordArray.filter(item => item.id !== id))
-                localStorage.setItem("passwords", JSON.stringify(PasswordArray.filter(item => item.id !== id)))
-            }
+    const DeletePassword = (id) => {
+        if (window.confirm("Are you sure you want to delete this password?")) {
+            const updatedPasswords = PasswordArray.filter(item => item.id !== id);
+            setPasswordArray(updatedPasswords);
+            localStorage.setItem("passwords", JSON.stringify(updatedPasswords));
         }
     }
 
-    const editPassword = (id) => {
+    const EditPassword = (id) => {
         setform(PasswordArray.filter(i => i.id === id)[0])
         setPasswordArray(PasswordArray.filter(item => item.id !== id))
     }
 
     const copyText = (text) => {
+        navigator.clipboard.writeText(text)
         toast.success('copied', {
             position: "bottom-center",
             autoClose: 3000,
@@ -67,14 +72,13 @@ function Manage() {
             progress: undefined,
             theme: "light",
         });
-        navigator.clipboard.writeText(text)
     }
 
     return (
         <>
             <ToastContainer
                 position="bottom-center"
-                autoClose={3000}
+                autoClose={2000}
                 hideProgressBar={false}
                 newestOnTop={false}
                 closeOnClick={false}
@@ -84,11 +88,12 @@ function Manage() {
                 pauseOnHover
                 theme="light"
             />
-            <div className='mt-8'>
+
+            <div className='mt-8 min-h-139'>
                 <div className='h-fit w-screen flex justify-center item-center'>
                     <div className='h-fit w-3/5 text-center'>
                         <div className='mb-5'>
-                            <div className="text-cyan-500 text-[40px] font-extrabold">
+                            <div className="text-cyan-500 text-4xl font-extrabold">
                                 <span className="">&lt;Pass</span>
                                 <span className="text-black">OP/&gt;</span>
                             </div>
@@ -97,11 +102,11 @@ function Manage() {
                             </div>
                         </div>
 
-                        <input value={form.url} onChange={handleChange} name="url" type="url" placeholder='Enter the Website URL...' className='w-4/5 h-4 border-3 border-cyan-600 rounded-full px-2 py-3 focus:outline-none' />
-                        <div className='flex justify-center items-center gap-32 mt-5'>
-                            <input value={form.username} onChange={handleChange} name="username" type="text" placeholder='Enter the Username...' className='w-1/3 h-4 border-3 border-cyan-600 rounded-full px-2 py-3 focus:outline-none' />
+                        <input value={form.url} onChange={handleChange} name="url" type="url" placeholder='Enter the Website URL...' className='w-4/5 h-4 border-3 border-cyan-600 rounded-full px-2 py-3 focus:outline-none' required />
+                        <div className='flex justify-center items-center gap-[8vw] mt-5'>
+                            <input value={form.username} onChange={handleChange} name="username" type="text" placeholder='Enter the Username...' className='w-1/3 h-4 border-3 border-cyan-600 rounded-full px-2 py-3 focus:outline-none' required />
                             <div className='w-1/3 h-fit border-3 border-cyan-600 rounded-full flex items-center'>
-                                <input value={form.password} onChange={handleChange} name="password" type="password" placeholder='Enter the Passsword...' className='w-[300px] h-4 rounded-full px-2 py-3 focus:outline-none ' id='show' />
+                                <input value={form.password} onChange={handleChange} name="password" type="password" placeholder='Enter the Passsword...' className='w-[300px] h-4 rounded-full px-2 py-3 focus:outline-none ' id='show' required />
                                 <div className='flex justify-center'>
                                     <lord-icon
                                         id='showa'
@@ -111,14 +116,14 @@ function Manage() {
                                         stroke="bold"
                                         state="hover-look-around"
                                         colors="primary:#121331,secondary:#00acc1"
-                                        className="w-7 h-6 mr-1 cursor-pointer">
+                                        className="w-7 h-6 cursor-pointer">
                                     </lord-icon>
                                 </div>
                             </div>
                         </div>
 
                         <div className='w-full mt-5 flex justify-center item-center'>
-                            <button onClick={Add} type='button' className=' w-fit '>
+                            <button onClick={AddPassword} type='button' className=' w-fit '>
                                 <lord-icon
                                     src="https://cdn.lordicon.com/sbnjyzil.json"
                                     trigger="hover"
@@ -127,7 +132,7 @@ function Manage() {
                                     colors="primary:#00acc1,secondary:#000000"
                                     className='w-12 h-12 cursor-pointer'>
                                 </lord-icon>
-                                <h2 className='text-lg h-fit font-medium text-center'>ADD</h2>
+                                <h2 className='text-lg h-fit font-medium text-center'>Add</h2>
                             </button>
                         </div>
                     </div>
@@ -142,20 +147,20 @@ function Manage() {
                             </svg>
                         </div>
                     </div>}
-                    {PasswordArray.length != 0 && <table className='w-3/5 '>
-                        <thead>
+                    {PasswordArray.length != 0 && <table className='w-3/5'>
+                        <thead >
                             <tr className='flex gap-3 items-center'>
                                 <th className=' bg-cyan-400 w-92 h-8 border-3 border-cyan-400 rounded-full px-2 flex justify-center'>Url</th>
                                 <th className='bg-cyan-400 w-64 h-8 border-3 border-cyan-400 rounded-full px-2 flex  justify-center'>Username</th>
                                 <th className='bg-cyan-400 w-72 h-8 border-3 border-cyan-400 rounded-full px-2 flex justify-center'>Password</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody >
                             {PasswordArray.map((item, index) => {
-                                return <tr key={index} className='my-3 gap-3 flex'>
+                                return <tr key={index} className='w-fit my-3 gap-3 flex'>
                                     <td className='w-92 h-8 border-3 border-cyan-600 rounded-full gap-3 px-2 flex justify-between'>
                                         <div className='overflow-hidden'><a href={item.url} target='_blank'>{item.url}</a></div>
-                                        <button onClick={() => { copyText(item.password) }} className='cursor-pointer'>
+                                        <button onClick={() => { copyText(item.url) }} className='cursor-pointer'>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="14" fill="currentColor" className="bi bi-copy" viewBox="0 0 16 16">
                                                 <path fillRule="evenodd" d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z" />
                                             </svg>
@@ -163,7 +168,7 @@ function Manage() {
                                     </td>
                                     <td className='w-64 h-8 border-3 border-cyan-600 rounded-full px-2 gap-3 flex justify-between'>
                                         <div>{item.username}</div>
-                                        <button onClick={() => { copyText(item.password) }} className='cursor-pointer'>
+                                        <button onClick={() => { copyText(item.username) }} className='cursor-pointer'>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="14" fill="currentColor" className="bi bi-copy" viewBox="0 0 16 16">
                                                 <path fillRule="evenodd" d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z" />
                                             </svg>
@@ -189,9 +194,9 @@ function Manage() {
                                             </button>
                                         </div>
                                     </td>
-                                    <td className='flex justify-center items-center'>
+                                    <td className='h-8 w-fit flex justify-center items-center'>
                                         <lord-icon
-                                            onClick={() => { editPassword(item.id) }}
+                                            onClick={() => { EditPassword(item.id) }}
                                             src="https://cdn.lordicon.com/exymduqj.json"
                                             trigger="hover"
                                             stroke="bold"
@@ -200,7 +205,7 @@ function Manage() {
                                             className="w-7 h-7 cursor-pointer">
                                         </lord-icon>
                                         <lord-icon
-                                            onClick={() => { deletePassword(item.id) }}
+                                            onClick={() => { DeletePassword(item.id) }}
                                             src="https://cdn.lordicon.com/hwjcdycb.json"
                                             trigger="morph"
                                             stroke="bold"

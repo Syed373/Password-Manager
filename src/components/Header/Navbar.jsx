@@ -5,9 +5,9 @@ export default function Navbar() {
         <>
             <nav className=" h-24 w-screen">
                 <div className=" h-24 w-screen flex justify-around items-center">
-                    <div className="text-cyan-500 text-3xl font-extrabold cursor-pointer">
+                    <div className=" text-3xl font-extrabold cursor-pointer">
                         <a href="/">
-                            <span className="">&lt;Pass</span>
+                            <span className="text-cyan-500">&lt;Pass</span>
                             <span className="text-black">OP/&gt;</span>
                         </a>
                     </div>
