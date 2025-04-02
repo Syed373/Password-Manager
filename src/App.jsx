@@ -9,8 +9,6 @@ function App() {
 
   return (
     <>
-      <div className="absolute z-[-5] bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_800px_at_-30%_-100px,#00ffff,transparent)]"></div>
-      <div className="absolute z-[-5] bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_800px_at_130%_-100px,#00ffff,transparent)]"></div>
       <div>
         <Navbar></Navbar>
         <Manage></Manage>

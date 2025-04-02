@@ -3,8 +3,8 @@ import React from "react";
 export default function Navbar() {
     return (
         <>
-            <nav className=" h-24 w-screen">
-                <div className=" h-24 w-screen flex justify-around items-center">
+            <nav className=" h-24 w-screen ">
+                <div className=" h-24 w-full flex justify-around items-center">
                     <div className=" text-3xl font-extrabold cursor-pointer">
                         <a href="/">
                             <span className="text-cyan-500">&lt;Pass</span>

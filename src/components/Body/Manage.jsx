@@ -24,7 +24,9 @@ function Manage() {
         const passwords = localStorage.getItem("passwords")
 
         if (passwords) {
-            setPasswordArray(JSON.parse(passwords))
+            setTimeout(()=>{
+                setPasswordArray(JSON.parse(passwords))
+            },500)
         }
     }, [])
 
@@ -88,9 +90,11 @@ function Manage() {
                 pauseOnHover
                 theme="light"
             />
+            <div className="absolute z-[-2] bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_800px_at_-30%_-100px,#00ffff,transparent)]"></div>
+            <div className="absolute z-[-2] bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_800px_at_130%_-100px,#00ffff,transparent)]"></div>
 
-            <div className='mt-8 min-h-139'>
-                <div className='h-fit w-screen flex justify-center item-center'>
+            <div className='mt-8 w-screen min-h-138 max-h-full md:container '>
+                <div className='h-fit w-full flex flex-col md:flex-row justify-center item-center'>
                     <div className='h-fit w-3/5 text-center'>
                         <div className='mb-5'>
                             <div className="text-cyan-500 text-4xl font-extrabold">
@@ -103,7 +107,7 @@ function Manage() {
                         </div>
 
                         <input value={form.url} onChange={handleChange} name="url" type="url" placeholder='Enter the Website URL...' className='w-4/5 h-4 border-3 border-cyan-600 rounded-full px-2 py-3 focus:outline-none' required />
-                        <div className='flex justify-center items-center gap-[8vw] mt-5'>
+                        <div className='flex flex-col md:flex-row justify-center items-center gap-[8vw] mt-5'>
                             <input value={form.username} onChange={handleChange} name="username" type="text" placeholder='Enter the Username...' className='w-1/3 h-4 border-3 border-cyan-600 rounded-full px-2 py-3 focus:outline-none' required />
                             <div className='w-1/3 h-fit border-3 border-cyan-600 rounded-full flex items-center'>
                                 <input value={form.password} onChange={handleChange} name="password" type="password" placeholder='Enter the Passsword...' className='w-[300px] h-4 rounded-full px-2 py-3 focus:outline-none ' id='show' required />
@@ -137,7 +141,7 @@ function Manage() {
                         </div>
                     </div>
                 </div>
-                <div className='h-fit w-screen flex justify-center item-center my-10'>
+                <div className='h-fit w-screen flex justify-center items-center my-10 overflow-x-hidden'>
                     {PasswordArray.length === 0 && <div >
                         No Passwords to show
                         <div className='flex justify-center mt-5'>
@@ -147,12 +151,13 @@ function Manage() {
                             </svg>
                         </div>
                     </div>}
-                    {PasswordArray.length != 0 && <table className='w-3/5'>
+                    {PasswordArray.length != 0 && <table className='w-fit'>
                         <thead >
                             <tr className='flex gap-3 items-center'>
                                 <th className=' bg-cyan-400 w-92 h-8 border-3 border-cyan-400 rounded-full px-2 flex justify-center'>Url</th>
                                 <th className='bg-cyan-400 w-64 h-8 border-3 border-cyan-400 rounded-full px-2 flex  justify-center'>Username</th>
                                 <th className='bg-cyan-400 w-72 h-8 border-3 border-cyan-400 rounded-full px-2 flex justify-center'>Password</th>
+                                <th className='bg-cyan-400 w-12 h-8 border-3 border-cyan-400 rounded-full px-2 flex justify-center'></th>
                             </tr>
                         </thead>
                         <tbody >
@@ -194,7 +199,7 @@ function Manage() {
                                             </button>
                                         </div>
                                     </td>
-                                    <td className='h-8 w-fit flex justify-center items-center'>
+                                    <td className='h-8 w-12 flex justify-center items-center'>
                                         <lord-icon
                                             onClick={() => { EditPassword(item.id) }}
                                             src="https://cdn.lordicon.com/exymduqj.json"
